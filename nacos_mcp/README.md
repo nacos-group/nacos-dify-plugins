@@ -5,6 +5,7 @@
 **Type:** tool
 
 ### Description
+Discover SSE/Streamable HTTP-type MCP Server services registered in Nacos and convert them into tool calls in Dify.
 
 发现 Nacos 中注册的 SSE/Streamable Http 类型 MCP Server 服务并转化为 Dify 中的工具调用
 
