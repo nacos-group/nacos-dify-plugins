@@ -1,0 +1,19 @@
+identity:
+  author: aias00
+  name: nacos
+  label:
+    en_US: nacos
+    zh_Hans: nacos
+    pt_BR: nacos
+  description:
+    en_US: nacos client
+    zh_Hans: nacos client
+    pt_BR: nacos client
+  icon: nacos-logo.png
+tools:
+  - tools/nacos_reader.yaml
+  - tools/nacos_writer.yaml
+
+extra:
+  python:
+    source: provider/nacos.py

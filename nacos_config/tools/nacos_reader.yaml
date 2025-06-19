@@ -1,0 +1,95 @@
+identity:
+  name: nacos_reader
+  author: aias00
+  label:
+    en_US: nacos reader
+    zh_Hans: 读取 nacos
+    pt_BR: nacos reader
+description:
+  human:
+    en_US: nacos reader
+    zh_Hans: 读取 nacos
+    pt_BR: nacos reader
+  llm: A tool help with nacos config 
+parameters:
+  - name: server_addresses
+    type: string
+    required: true
+    label:
+      en_US: Server Addresses
+      zh_Hans: 服务器地址
+      pt_BR: Server Addresses
+    human_description:
+      en_US: Nacos server addresses
+      zh_Hans: Nacos服务器地址列表
+      pt_BR: Nacos server addresses
+    llm_description: Nacos server addresses list (e.g. localhost:8848)
+    form: form
+  - name: username
+    type: string
+    required: true
+    label:
+      en_US: Username
+      zh_Hans: 用户名
+      pt_BR: Username
+    human_description:
+      en_US: Nacos username
+      zh_Hans: Nacos用户名
+      pt_BR: Nacos username
+    llm_description: The username for Nacos authentication
+    form: form
+  - name: password
+    type: secret-input
+    required: true
+    label:
+      en_US: Password
+      zh_Hans: 密码
+      pt_BR: Password
+    human_description:
+      en_US: Nacos password
+      zh_Hans: Nacos密码
+      pt_BR: Nacos password
+    llm_description: The password for Nacos authentication
+    form: form
+  - name: namespace
+    type: string
+    required: true
+    label:
+      en_US: Namespace
+      zh_Hans: 命名空间
+      pt_BR: Namespace
+    human_description:
+      en_US: Nacos namespace ID
+      zh_Hans: Nacos命名空间ID
+      pt_BR: Nacos namespace ID
+    llm_description: The namespace ID in Nacos
+    form: form
+  - name: data_id
+    type: string
+    required: true
+    label:
+      en_US: Data ID
+      zh_Hans: 配置ID
+      pt_BR: Data ID
+    human_description:
+      en_US: Nacos configuration data ID
+      zh_Hans: Nacos配置的数据ID
+      pt_BR: Nacos configuration data ID
+    llm_description: The data ID of the configuration in Nacos
+    form: form
+  - name: group
+    type: string
+    required: true
+    label:
+      en_US: Group
+      zh_Hans: 分组
+      pt_BR: Group
+    human_description:
+      en_US: Nacos configuration group
+      zh_Hans: Nacos配置分组
+      pt_BR: Nacos configuration group
+    llm_description: The group name of the configuration in Nacos
+    form: form
+extra:
+  python:
+    source: tools/nacos_reader.py
