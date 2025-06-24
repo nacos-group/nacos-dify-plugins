@@ -1,2 +1,0 @@
-dify_plugin~=0.0.1b72
-nacos_py_client>=0.2.6

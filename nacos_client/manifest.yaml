@@ -3,15 +3,13 @@ type: plugin
 author: aias00
 name: nacos
 label:
-  en_US: nacos
-  ja_JP: nacos
-  zh_Hans: nacos
-  pt_BR: nacos
+  en_US: Nacos
+  zh_Hans: Nacos
+  pt_BR: Nacos
 description:
-  en_US: nacos client
-  ja_JP: nacos client
-  zh_Hans: nacos client
-  pt_BR: nacos client
+  en_US: Nacos client of Naming and Config
+  zh_Hans: Nacos 注册配置客户端
+  pt_BR: Nacos client of Naming and Config
 icon: nacos-logo.png
 resource:
   memory: 268435456
