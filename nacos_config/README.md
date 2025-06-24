@@ -6,47 +6,46 @@
 
 ## Description
 
-### NacosWriter Plugin
+### Set up Authorization
+Enter the Nacos Server address, username, and password to configure Nacos  plugin authentication.
+
+![](./_assets/authorization.jpg)
+
+### Nacos Config Writer Plugin
 
 The Nacos Writer Plugin allows users to write data into Nacos.
-![](./_assets/nacos_writer.png)
+![](./_assets/nacos_writer.jpg)
 
 ### Features
 
-- Write data into Nacos and returns standard output and standard error
+- Write Config into Nacos and returns standard output and standard error
 
 ### Parameters
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| server_addresses | string | Yes | server addresses of the Nacos server |
-| username | string | Yes | username of the Nacos server |
-| password | string | Yes | password of the Nacos server |
-| namespace | string | Yes | namespace of the Nacos server |
-| data_id | string | Yes | data_id of the Nacos server |
-| group | string | Yes | group of the Nacos server |
-| content | string | Yes | Content to write into Nacos |
+| Parameter        | Type | Required | Description |
+|------------------|------|----------|-------------|
+| namespace_id     | string | Yes | namespace of the Nacos server |
+| data_id          | string | Yes | data_id of the Nacos server |
+| group_name       | string | Yes | group of the Nacos server |
+| content          | string | Yes | Content to write into Nacos |
 
 
-### NacosReader Plugin
+### Nacos Config Reader Plugin
 
-The Nacos Reader Plugin allows users to read data from Nacos.
-![](./_assets/nacos_reader.png)
+The Nacos Config Reader Plugin allows users to read data from Nacos.
+![](./_assets/nacos_reader.jpg)
 
 ### Features
 
-- Read data from Nacos and returns standard output and standard error
+- Read Config from Nacos and returns standard output and standard error
 
 ### Parameters
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| server_addresses | string | Yes | server addresses of the Nacos server |
-| username | string | Yes | username of the Nacos server |
-| password | string | Yes | password of the Nacos server |
-| namespace | string | Yes | namespace of the Nacos server |
-| data_id | string | Yes | data_id of the Nacos server |
-| group | string | Yes | group of the Nacos server |
+| Parameter    | Type | Required | Description |
+|--------------|------|----------|-------------|
+| namespace_id | string | Yes | namespace of the Nacos server |
+| data_id      | string | Yes | data_id of the Nacos server |
+| group_name   | string | Yes | group of the Nacos server |
 
 ## Security Considerations
 
