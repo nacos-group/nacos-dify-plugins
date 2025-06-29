@@ -18,6 +18,7 @@ from mcp.client.streamable_http import streamablehttp_client
 
 from utils.nacos_utils import update_tools_according_to_nacos
 
+
 # 使用自定义处理器设置日志
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)

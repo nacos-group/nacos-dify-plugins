@@ -5,6 +5,7 @@ from typing import Any
 
 from dify_plugin import Tool
 from dify_plugin.entities.tool import ToolInvokeMessage
+from maintainer.ai.model.nacos_mcp_info import McpServerDetailInfo, McpToolMeta
 from maintainer.ai.nacos_mcp_service import NacosAIMaintainerService
 from maintainer.common.ai_maintainer_client_config_builder import \
     AIMaintainerClientConfigBuilder
@@ -16,6 +17,7 @@ from mcp.client.sse import sse_client
 from mcp.client.streamable_http import streamablehttp_client
 
 from utils.nacos_utils import update_tools_according_to_nacos
+
 
 # 使用自定义处理器设置日志
 logger = logging.getLogger(__name__)
