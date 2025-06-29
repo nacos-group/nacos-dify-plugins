@@ -16,6 +16,8 @@ from mcp import ClientSession
 from mcp.client.sse import sse_client
 from mcp.client.streamable_http import streamablehttp_client
 
+from nacos_mcp.tools.nacos_utils import update_tools_according_to_nacos
+
 # 使用自定义处理器设置日志
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -92,6 +94,8 @@ class ListTools(Tool):
                     if not export_path.startswith("/"):
                         url = "{0}://{1}:{2}/{3}".format(http_schema,address,str(port),export_path)
                     tools = await get_tools(mcp_server_detail_info.protocol, url)
+
+                    tools = update_tools_according_to_nacos(tools, mcp_server_detail_info)
 
                     mcp_name_tools_list = {
                         "name": original_name,

@@ -8,7 +8,7 @@ description:
   human:
     en_US: Query the list of registered MCP Servers in Nacos.
     zh_Hans: 查询Nacos中注册的MCP Server列表.
-  llm: 查询Nacos中注册的 MCP Server 可用的 MCP Server 列表，请根据返回的结果，挑选和任务相关的需要使用的 MCP Server.
+  llm: 该方法用于查询Nacos中注册的 MCP Server 可用的 MCP Server 列表，你需要在任务开始时优先调用该方法，根据用户的任务和返回的MCP Server的名字和描述，挑选和任务相关的需要使用的 MCP Server，并进一步查找MCP Server可用的工具.
 extra:
   python:
     source: tools/list_mcp_servers.py
