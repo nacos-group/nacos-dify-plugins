@@ -2,11 +2,9 @@ import asyncio
 import random
 from collections.abc import Generator
 from typing import Any
-from warnings import catch_warnings
 
 from dify_plugin import Tool
 from dify_plugin.entities.tool import ToolInvokeMessage
-from maintainer.ai.model.nacos_mcp_info import McpServerDetailInfo, McpToolMeta
 from maintainer.ai.nacos_mcp_service import NacosAIMaintainerService
 from maintainer.common.ai_maintainer_client_config_builder import \
     AIMaintainerClientConfigBuilder
@@ -17,7 +15,7 @@ from mcp import ClientSession, types
 from mcp.client.sse import sse_client
 from mcp.client.streamable_http import streamablehttp_client
 
-from nacos_mcp.tools.nacos_utils import update_tools_according_to_nacos
+from utils.nacos_utils import update_tools_according_to_nacos
 
 # 使用自定义处理器设置日志
 logger = logging.getLogger(__name__)
@@ -26,6 +24,7 @@ logger.addHandler(plugin_logger_handler)
 
 
 class ListTools(Tool):
+
     def _invoke(self, tool_parameters: dict[str, Any]) -> Generator[ToolInvokeMessage]:
 
         def get_clients(_protocol:str, _url:str):
