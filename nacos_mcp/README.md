@@ -1,8 +1,11 @@
 ## Nacos MCP
 
 **Author:** nacos
-**Version:** 0.0.1
+**Version:** 0.0.2
 **Type:** tool
+
+### Repository 仓库
+https://github.com/nacos-group/nacos-dify-plugins/tree/main/nacos_mcp
 
 ### Description
 Discover SSE/Streamable HTTP-type MCP Server services registered in Nacos and convert them into tool calls in Dify.

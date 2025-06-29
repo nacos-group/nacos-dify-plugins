@@ -6,15 +6,18 @@ from warnings import catch_warnings
 
 from dify_plugin import Tool
 from dify_plugin.entities.tool import ToolInvokeMessage
+from maintainer.ai.model.nacos_mcp_info import McpServerDetailInfo, McpToolMeta
 from maintainer.ai.nacos_mcp_service import NacosAIMaintainerService
 from maintainer.common.ai_maintainer_client_config_builder import \
     AIMaintainerClientConfigBuilder
 
 import logging
 from dify_plugin.config.logger_format import plugin_logger_handler
-from mcp import ClientSession
+from mcp import ClientSession, types
 from mcp.client.sse import sse_client
 from mcp.client.streamable_http import streamablehttp_client
+
+from nacos_mcp.tools.nacos_utils import update_tools_according_to_nacos
 
 # 使用自定义处理器设置日志
 logger = logging.getLogger(__name__)
@@ -92,6 +95,8 @@ class ListTools(Tool):
                     if not export_path.startswith("/"):
                         url = "{0}://{1}:{2}/{3}".format(http_schema,address,str(port),export_path)
                     tools = await get_tools(mcp_server_detail_info.protocol, url)
+
+                    tools = update_tools_according_to_nacos(tools, mcp_server_detail_info)
 
                     mcp_name_tools_list = {
                         "name": original_name,
