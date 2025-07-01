@@ -1,7 +1,7 @@
 # Nacos Plugin
 
 **Author:** [aias00](https://github.com/nacos-group/nacos-dify-plugins/nacos_config)
-**Version:** 0.0.2
+**Version:** 0.0.3
 **Type:** tool
 
 ## Description
