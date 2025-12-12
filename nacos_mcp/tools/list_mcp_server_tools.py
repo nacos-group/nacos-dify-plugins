@@ -36,7 +36,7 @@ class ListTools(Tool):
                 return streamablehttp_client(url=_url)
 
         async def get_tools(_protocol:str, _url:str):
-            async with get_clients(_protocol, _url) as (_read, _write):
+            async with get_clients(_protocol, _url) as (_read, _write, _):
                 async with ClientSession(_read, _write) as _session:
                     await _session.initialize()
                     _tools = await _session.list_tools()
