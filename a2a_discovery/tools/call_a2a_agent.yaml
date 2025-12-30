@@ -1,0 +1,76 @@
+identity:
+  name: "call_a2a_agent"
+  author: "nacos"
+  label:
+    en_US: "Call A2A Agent"
+    zh_Hans: "调用 A2A 智能体"
+description:
+  human:
+    en_US: "Call remote A2A agent"
+    zh_Hans: "调用远程的 A2A agent"
+  llm: "Call remote A2A agent"
+parameters:
+  - name: type
+    type: select
+    required: true
+    label:
+      en_US: How to Discovery A2A Agent
+      zh_Hans: 如何发现 A2A 智能体
+    human_description:
+      en_US: "How to Discovery A2A Agent"
+      zh_Hans: "如何发现 A2A 智能体"
+    form: form
+    options:
+      - value: "nacos"
+        label:
+          en_US: Discovery A2A Agent In Nacos Agent Registry
+          zh_Hans: 发现 Nacos Agent 注册中心中的 A2A 智能体
+      - value: "url"
+        label:
+          en_US: Discovery A2A Agent By URL
+          zh_Hans: 通过 URL 发现 A2A 智能体
+  - name: a2a_agent_name
+    type: string
+    required: false
+    label:
+      en_US: A2A Agent Name in Nacos Agent Registry
+      zh_Hans: Nacos 智能体注册中心中的 A2A 智能体名称
+    human_description:
+      en_US: A2A Agent Name in Nacos Agent Registry
+      zh_Hans: Nacos 智能体注册中心中的 A2A 智能体名称
+    form: form
+  - name: a2a_agent_url
+    type: string
+    required: false
+    label:
+      en_US: A2A Agent URL
+      zh_Hans: A2A 智能体的 URL
+    human_description:
+      en_US: A2A Agent URL
+      zh_Hans: A2A 智能体的 URL
+    form: form
+  - name: namespace_id
+    type: string
+    required: false
+    label:
+      en_US: namespace_id
+      zh_Hans: 命名空间ID
+    human_description:
+      en_US: Nacos namespaceId
+      zh_Hans: Nacos 命名空间ID, 如果要支持从 Nacos 智能体注册中心发现，请填写该字段。默认为 public
+    form: form
+    default: public
+  - name: query
+    type: string
+    required: false
+    label:
+      en_US: Query string need to send to A2A Agent
+      zh_Hans: 查询语句
+    human_description:
+      en_US: "Query string need to send to A2A Agent"
+      zh_Hans: "发送给 A2A Agent 的信息"
+    llm_description: "Query string need to send to A2A Agent"
+    form: llm
+extra:
+  python:
+    source: tools/call_a2a_agent.py
