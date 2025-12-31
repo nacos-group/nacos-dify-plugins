@@ -6,9 +6,7 @@ from typing import Any
 
 from dify_plugin import Tool
 from dify_plugin.entities.tool import ToolInvokeMessage
-from maintainer.ai.nacos_mcp_service import NacosAIMaintainerService
-from maintainer.common.ai_maintainer_client_config_builder import \
-	AIMaintainerClientConfigBuilder
+from maintainer.ai.nacos_ai_maintainer_service import NacosAIMaintainerService
 from mcp import ClientSession
 from mcp.client.sse import sse_client
 from mcp.client.streamable_http import streamablehttp_client
@@ -16,6 +14,7 @@ from mcp.client.streamable_http import streamablehttp_client
 
 import logging
 from dify_plugin.config.logger_format import plugin_logger_handler
+from v2.nacos import ClientConfigBuilder
 
 # 使用自定义处理器设置日志
 logger = logging.getLogger(__name__)
@@ -40,23 +39,23 @@ class CallTool(Tool):
 					return _tools
 
 		async def call_tool():
-			nacos_addr = self.runtime.credentials["nacos_addr"]
-			username = self.runtime.credentials["nacos_username"]
-			password = self.runtime.credentials["nacos_password"]
-			access_key = self.runtime.credentials["nacos_accessKey"]
-			secret_key = self.runtime.credentials["nacos_secretKey"]
-			namespace_id = tool_parameters["namespace_id"]
+			nacos_addr = self.runtime.credentials.get("nacos_addr")
+			username = self.runtime.credentials.get("nacos_username")
+			password = self.runtime.credentials.get("nacos_password")
+			access_key = self.runtime.credentials.get("nacos_accessKey")
+			secret_key = self.runtime.credentials.get("nacos_secretKey")
+			namespace_id = tool_parameters.get("namespace_id")
 			if namespace_id is None or len(namespace_id) == 0:
 				namespace_id = "public"
-			mcp_server_name = tool_parameters["mcp_server_name"]
-			tool_name = tool_parameters["tool_name"]
-			arguments_json = tool_parameters["arguments"]
+			mcp_server_name = tool_parameters.get("mcp_server_name")
+			tool_name = tool_parameters.get("tool_name")
+			arguments_json = tool_parameters.get("arguments")
 			try:
 				arguments = json.loads(arguments_json)
 			except json.JSONDecodeError as e:
 				raise ValueError(f"Arguments must be a valid JSON string: {e}")
 
-			ai_client_config = AIMaintainerClientConfigBuilder().server_address(
+			ai_client_config = ClientConfigBuilder().server_address(
 					nacos_addr).username(
 					username).password(
 					password).access_key(

@@ -3,12 +3,12 @@ from typing import Any
 
 from dify_plugin import ToolProvider
 from dify_plugin.errors.tool import ToolProviderCredentialValidationError
-from maintainer.ai.nacos_mcp_service import NacosAIMaintainerService
-from maintainer.common.ai_maintainer_client_config_builder import \
-    AIMaintainerClientConfigBuilder
+
 
 import logging
 from dify_plugin.config.logger_format import plugin_logger_handler
+from maintainer.ai.nacos_ai_maintainer_service import NacosAIMaintainerService
+from v2.nacos import ClientConfigBuilder
 
 # 使用自定义处理器设置日志
 logger = logging.getLogger(__name__)
@@ -30,7 +30,7 @@ class NacosMcpProvider(ToolProvider):
                 nacos_access_key = credentials.get("nacos_accessKey")
                 nacos_secret_key = credentials.get("nacos_secretKey")
 
-                ai_client_config = AIMaintainerClientConfigBuilder().server_address(
+                ai_client_config = ClientConfigBuilder().server_address(
                         nacos_addr).username(
                         nacos_username).password(
                         nacos_password).access_key(

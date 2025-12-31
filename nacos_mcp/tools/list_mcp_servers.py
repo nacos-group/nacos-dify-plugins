@@ -4,13 +4,12 @@ from typing import Any
 
 from dify_plugin import Tool
 from dify_plugin.entities.tool import ToolInvokeMessage
-from maintainer.ai.nacos_mcp_service import NacosAIMaintainerService
-from maintainer.common.ai_maintainer_client_config_builder import \
-    AIMaintainerClientConfigBuilder
 
 
 import logging
 from dify_plugin.config.logger_format import plugin_logger_handler
+from maintainer.ai.nacos_ai_maintainer_service import NacosAIMaintainerService
+from v2.nacos import ClientConfigBuilder
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -21,18 +20,18 @@ class ListServers(Tool):
     def _invoke(self, tool_parameters: dict[str, Any]) -> Generator[ToolInvokeMessage]:
 
         async def list_mcp_servers():
-            nacos_addr = self.runtime.credentials["nacos_addr"]
-            username = self.runtime.credentials["nacos_username"]
-            password = self.runtime.credentials["nacos_password"]
-            access_key = self.runtime.credentials["nacos_accessKey"]
-            secret_key = self.runtime.credentials["nacos_secretKey"]
-            namespace_id = tool_parameters["namespace_id"]
+            nacos_addr = self.runtime.credentials.get("nacos_addr")
+            username = self.runtime.credentials.get("nacos_username")
+            password = self.runtime.credentials.get("nacos_password")
+            access_key = self.runtime.credentials.get("nacos_accessKey")
+            secret_key = self.runtime.credentials.get("nacos_secretKey")
+            namespace_id = tool_parameters.get("namespace_id")
             if namespace_id is None or len(namespace_id) == 0:
                 namespace_id = "public"
-            page_no = tool_parameters["page_no"]
-            page_size = tool_parameters["page_size"]
+            page_no = tool_parameters.get("page_no")
+            page_size = tool_parameters.get("page_size")
 
-            ai_client_config = AIMaintainerClientConfigBuilder().server_address(
+            ai_client_config = ClientConfigBuilder().server_address(
                     nacos_addr).username(
                     username).password(
                     password).access_key(
