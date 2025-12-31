@@ -8,7 +8,7 @@ description:
   human:
     en_US: "Call remote A2A agent"
     zh_Hans: "调用远程的 A2A agent"
-  llm: "Call remote A2A agent"
+  llm: "Call remote agent"
 parameters:
   - name: type
     type: select

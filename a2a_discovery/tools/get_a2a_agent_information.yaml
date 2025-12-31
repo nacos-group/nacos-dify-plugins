@@ -8,7 +8,8 @@ description:
   human:
     en_US: "Get basic information of A2A agent, includes name and description"
     zh_Hans: "获取 A2A 智能体的基础信息，包括名称和描述等"
-  llm: "Get basic information of A2A agent, includes name and description"
+  llm: "Get basic information of remote agent, includes name, description and skills, 
+  You can use this tool to understand the capabilities of the remote agent for future invocation."
 parameters:
   - name: type
     type: select

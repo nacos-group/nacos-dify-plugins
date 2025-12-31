@@ -4,7 +4,46 @@ import httpx
 from a2a.client import A2AClientHTTPError, A2AClientJSONError
 from a2a.types import AgentCard
 from httpx import Timeout
+from maintainer.ai.nacos_ai_maintainer_service import NacosAIMaintainerService
 from pydantic import ValidationError
+from v2.nacos import ClientConfigBuilder
+
+
+async def get_a2a_agent_card(
+		agent_type: str,
+		a2a_agent_url: str,
+		nacos_addr: str,
+		a2a_agent_name: str,
+		namespace_id: str,
+		username: str,
+		password: str,
+		access_key: str,
+		secret_key: str
+) -> AgentCard:
+	agent_card: AgentCard | None = None
+	if agent_type == "url":
+		if a2a_agent_url is None:
+			raise ValueError("when type is url, a2a_agent_url is required")
+		agent_card = await get_agent_card_from_url(a2a_agent_url)
+	elif agent_type == "nacos":
+		if a2a_agent_name is None:
+			raise ValueError("when type is nacos, a2a_agent_name is required")
+		if nacos_addr is None:
+			raise ValueError("when type is nacos, nacos_addr is required")
+		nacos_client_config = ClientConfigBuilder().server_address(
+				nacos_addr).namespace_id(
+				namespace_id).username(
+				username).password(
+				password).access_key(
+				access_key).secret_key(
+				secret_key).build()
+		nacos_ai_maintainer_service = await NacosAIMaintainerService.create_ai_service(
+			nacos_client_config)
+		agent_card = await nacos_ai_maintainer_service.get_agent_card(
+			namespace_id=namespace_id,
+			agent_name=a2a_agent_name,
+			registration_type="URL")
+	return agent_card
 
 
 async def get_agent_card_from_url(target_url:str) -> AgentCard:
