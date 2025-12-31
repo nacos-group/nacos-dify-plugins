@@ -30,6 +30,10 @@ async def get_a2a_agent_card(
 			raise ValueError("when type is nacos, a2a_agent_name is required")
 		if nacos_addr is None:
 			raise ValueError("when type is nacos, nacos_addr is required")
+
+		if ':' not in nacos_addr.split('//')[-1]:
+			nacos_addr = f"{nacos_addr}:8848"
+
 		nacos_client_config = ClientConfigBuilder().server_address(
 				nacos_addr).namespace_id(
 				namespace_id).username(
