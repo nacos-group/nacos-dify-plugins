@@ -6,70 +6,87 @@ identity:
     zh_Hans: "调用 A2A 智能体"
 description:
   human:
-    en_US: "Call remote A2A agent"
-    zh_Hans: "调用远程的 A2A agent"
-  llm: "Call remote agent"
+    en_US: "Call remote A2A agent, supporting dynamic selection from multiple pre-configured agents"
+    zh_Hans: "调用远程的 A2A 智能体，支持从预配置的多个智能体中动态选择"
+  llm: "Call a remote A2A agent. MUST call get_a2a_agent_information first to see available agents, then use the returned agent_name as target_agent here."
 parameters:
-  - name: type
+  - name: discovery_type
     type: select
     required: true
     label:
-      en_US: How to Discovery A2A Agent
-      zh_Hans: 如何发现 A2A 智能体
+      en_US: Agent Discovery Method
+      zh_Hans: 智能体发现方式
     human_description:
-      en_US: "How to Discovery A2A Agent"
-      zh_Hans: "如何发现 A2A 智能体"
+      en_US: "Choose how to discover A2A agents: via Nacos registry or direct URL"
+      zh_Hans: "选择如何发现 A2A 智能体：通过 Nacos 注册中心或直接 URL"
     form: form
     options:
       - value: "nacos"
         label:
-          en_US: Discovery A2A Agent In Nacos Agent Registry
-          zh_Hans: 发现 Nacos Agent 注册中心中的 A2A 智能体
+          en_US: Nacos Agent Registry
+          zh_Hans: Nacos 智能体注册中心
       - value: "url"
         label:
-          en_US: Discovery A2A Agent By URL
-          zh_Hans: 通过 URL 发现 A2A 智能体
-  - name: a2a_agent_name
+          en_US: Direct URL
+          zh_Hans: 直接 URL 访问
+  - name: available_agent_names
     type: string
     required: false
     label:
-      en_US: A2A Agent Name in Nacos Agent Registry
-      zh_Hans: Nacos 智能体注册中心中的 A2A 智能体名称
+      en_US: Available Agent Names (Nacos Mode)
+      zh_Hans: 可用智能体名称列表（Nacos 模式）
     human_description:
-      en_US: A2A Agent Name in Nacos Agent Registry
-      zh_Hans: Nacos 智能体注册中心中的 A2A 智能体名称
+      en_US: "For Nacos mode: Enter multiple agent names separated by commas. Example: translator_agent,search_agent,code_agent"
+      zh_Hans: "Nacos 模式下使用：输入多个智能体名称，用英文逗号分隔。示例：translator_agent,search_agent,code_agent"
+    placeholder:
+      en_US: "agent1,agent2,agent3"
+      zh_Hans: "agent1,agent2,agent3"
     form: form
-  - name: a2a_agent_url
+  - name: available_agent_urls
     type: string
     required: false
     label:
-      en_US: A2A Agent URL
-      zh_Hans: A2A 智能体的 URL
+      en_US: Available Agent URLs (URL Mode)
+      zh_Hans: 可用智能体 URL 映射（URL 模式）
     human_description:
-      en_US: A2A Agent URL
-      zh_Hans: A2A 智能体的 URL
+      en_US: "For URL mode: Enter a JSON object mapping agent names to their URLs. Example: {\"translator_agent\":\"http://host1:port/.well-known/agent.json\",\"search_agent\":\"http://host2:port/.well-known/agent.json\"}"
+      zh_Hans: "URL 模式下使用：输入 JSON 格式的智能体名称与 URL 映射。示例：{\"translator_agent\":\"http://host1:port/.well-known/agent.json\",\"search_agent\":\"http://host2:port/.well-known/agent.json\"}"
+    placeholder:
+      en_US: "{\"agent1\":\"http://url1\",\"agent2\":\"http://url2\"}"
+      zh_Hans: "{\"agent1\":\"http://url1\",\"agent2\":\"http://url2\"}"
     form: form
   - name: namespace_id
     type: string
     required: false
     label:
-      en_US: namespace_id
-      zh_Hans: 命名空间ID
+      en_US: Nacos Namespace ID
+      zh_Hans: Nacos 命名空间 ID
     human_description:
-      en_US: Nacos namespaceId
-      zh_Hans: Nacos 命名空间ID, 如果要支持从 Nacos 智能体注册中心发现，请填写该字段。默认为 public
+      en_US: "Nacos namespace ID for agent discovery. Required when using Nacos mode. Default: public"
+      zh_Hans: "Nacos 命名空间 ID，用于智能体发现。使用 Nacos 模式时需填写。默认值：public"
     form: form
     default: public
+  - name: target_agent
+    type: string
+    required: true
+    label:
+      en_US: Target Agent to Call
+      zh_Hans: 目标调用智能体
+    human_description:
+      en_US: "The agent name to call, selected from the available agents list"
+      zh_Hans: "要调用的智能体名称，从可用智能体列表中选择"
+    llm_description: "The agent_name to call. MUST be one of the agent_name values returned by get_a2a_agent_information. Choose the agent whose skills best match the user's request."
+    form: llm
   - name: query
     type: string
-    required: false
+    required: true
     label:
-      en_US: Query string need to send to A2A Agent
-      zh_Hans: 查询语句
+      en_US: Query Message
+      zh_Hans: 查询消息
     human_description:
-      en_US: "Query string need to send to A2A Agent"
-      zh_Hans: "发送给 A2A Agent 的信息"
-    llm_description: "Query string need to send to A2A Agent"
+      en_US: "The message or query to send to the selected A2A agent"
+      zh_Hans: "发送给所选 A2A 智能体的消息或查询内容"
+    llm_description: "The message to send to the target agent. Be clear and specific about what you need the agent to do."
     form: llm
 extra:
   python:

@@ -11,7 +11,7 @@ from dify_plugin import Tool
 from dify_plugin.config.logger_format import plugin_logger_handler
 from dify_plugin.entities.tool import ToolInvokeMessage
 
-from tools.utils import get_a2a_agent_card
+from tools.utils import get_target_agent_card, get_agent_names_list
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -22,23 +22,34 @@ class CallA2aAgentTool(Tool):
 	def _invoke(self, tool_parameters: dict[str, Any]) -> Generator[
 		ToolInvokeMessage]:
 
-		agent_type = tool_parameters.get("type")
-		a2a_agent_url = tool_parameters.get("a2a_agent_url")
-		nacos_addr = self.runtime.credentials.get("nacos_addr")
-		a2a_agent_name = tool_parameters.get("a2a_agent_name")
+		# Get discovery configuration
+		discovery_type = tool_parameters.get("discovery_type")
+		available_agent_names = tool_parameters.get("available_agent_names")
+		available_agent_urls = tool_parameters.get("available_agent_urls")
 		namespace_id = tool_parameters.get("namespace_id")
+		
+		# Get target agent selected by LLM
+		target_agent = tool_parameters.get("target_agent")
 		query = tool_parameters.get("query")
+		
+		# Get Nacos credentials
+		nacos_addr = self.runtime.credentials.get("nacos_addr")
 		username = self.runtime.credentials.get("nacos_username")
 		password = self.runtime.credentials.get("nacos_password")
 		access_key = self.runtime.credentials.get("nacos_accessKey")
 		secret_key = self.runtime.credentials.get("nacos_secretKey")
+		
+		# Log available agents for debugging
+		available_names = get_agent_names_list(discovery_type, available_agent_names, available_agent_urls)
+		logger.info(f"Available agents: {available_names}, Target agent: {target_agent}")
 
 		async def call_a2a_agent():
-			agent_card: AgentCard = await get_a2a_agent_card(
-					agent_type=agent_type,
-					a2a_agent_url=a2a_agent_url,
+			agent_card: AgentCard = await get_target_agent_card(
+					discovery_type=discovery_type,
+					target_agent=target_agent,
+					available_agent_names=available_agent_names,
+					available_agent_urls=available_agent_urls,
 					nacos_addr=nacos_addr,
-					a2a_agent_name=a2a_agent_name,
 					namespace_id=namespace_id,
 					username=username,
 					password=password,
@@ -98,11 +109,12 @@ class CallA2aAgentTool(Tool):
 			asyncio.set_event_loop(loop)
 
 		try:
-			call_result: AgentCard = loop.run_until_complete(call_a2a_agent())
+			call_result = loop.run_until_complete(call_a2a_agent())
 		except Exception as e:
-			logger.error(f"Error calling tool: {e}")
+			logger.error(f"Error calling agent '{target_agent}': {e}")
 			raise
 
 		yield self.create_json_message({
+			"target_agent": target_agent,
 			"result": call_result
 		})

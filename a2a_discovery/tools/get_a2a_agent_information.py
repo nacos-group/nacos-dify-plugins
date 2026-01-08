@@ -4,13 +4,12 @@ import logging
 from collections.abc import Generator
 from typing import Any
 
-from a2a.types import AgentCard
 from dify_plugin import Tool
 from dify_plugin.config.logger_format import plugin_logger_handler
 from dify_plugin.entities.tool import ToolInvokeMessage
 
 
-from tools.utils import get_a2a_agent_card
+from tools.utils import get_all_agents_info, get_agent_names_list
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -21,15 +20,22 @@ class GetA2aAgentInformationTool(Tool):
 	def _invoke(self, tool_parameters: dict[str, Any]) -> Generator[
 		ToolInvokeMessage]:
 
-		agent_type = tool_parameters.get("type")
-		a2a_agent_url = tool_parameters.get("a2a_agent_url")
-		nacos_addr = self.runtime.credentials.get("nacos_addr")
-		a2a_agent_name = tool_parameters.get("a2a_agent_name")
+		# Get discovery configuration
+		discovery_type = tool_parameters.get("discovery_type")
+		available_agent_names = tool_parameters.get("available_agent_names")
+		available_agent_urls = tool_parameters.get("available_agent_urls")
 		namespace_id = tool_parameters.get("namespace_id")
+		
+		# Get Nacos credentials
+		nacos_addr = self.runtime.credentials.get("nacos_addr")
 		username = self.runtime.credentials.get("nacos_username")
 		password = self.runtime.credentials.get("nacos_password")
 		access_key = self.runtime.credentials.get("nacos_accessKey")
 		secret_key = self.runtime.credentials.get("nacos_secretKey")
+		
+		# Log available agents for debugging
+		available_names = get_agent_names_list(discovery_type, available_agent_names, available_agent_urls)
+		logger.info(f"Getting information for all available agents: {available_names}")
 
 		try:
 			loop = asyncio.get_event_loop()
@@ -38,11 +44,11 @@ class GetA2aAgentInformationTool(Tool):
 			asyncio.set_event_loop(loop)
 
 		try:
-			agent_card_info : AgentCard = loop.run_until_complete(get_a2a_agent_card(
-					agent_type=agent_type,
-					a2a_agent_url=a2a_agent_url,
+			agents_info = loop.run_until_complete(get_all_agents_info(
+					discovery_type=discovery_type,
+					available_agent_names=available_agent_names,
+					available_agent_urls=available_agent_urls,
 					nacos_addr=nacos_addr,
-					a2a_agent_name=a2a_agent_name,
 					namespace_id=namespace_id,
 					username=username,
 					password=password,
@@ -50,12 +56,9 @@ class GetA2aAgentInformationTool(Tool):
 					secret_key=secret_key,
 			))
 		except Exception as e:
-			logger.error(f"Error calling tool: {e}")
+			logger.error(f"Error getting agents information: {e}")
 			raise
 
-
 		yield self.create_json_message({
-			"name": agent_card_info.name,
-			"description": agent_card_info.description,
-			"skills": agent_card_info.skills,
+			"agents": agents_info
 		})
