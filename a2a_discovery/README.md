@@ -122,6 +122,7 @@ Apache 2.0
 
 ### Links
 
+- [GitHub Repository](https://github.com/nacos-group/nacos-dify-plugins)
 - [Nacos](https://nacos.io/)
 - [A2A Protocol](https://github.com/google/A2A)
 - [Dify](https://dify.ai/)
@@ -246,6 +247,7 @@ Apache 2.0
 
 ### 相关链接
 
+- [GitHub 仓库](https://github.com/nacos-group/nacos-dify-plugins)
 - [Nacos](https://nacos.io/)
 - [A2A 协议](https://github.com/google/A2A)
 - [Dify](https://dify.ai/)
