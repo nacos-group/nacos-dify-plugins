@@ -1,0 +1,58 @@
+settings:
+  - name: app
+    type: app-selector
+    scope: all
+    required: true
+    label:
+      en_US: Dify App
+      zh_Hans: Dify App
+    placeholder:
+      en_US: Select the Dify App to expose
+      zh_Hans: 选择要暴露的 Dify App
+  
+  - name: agent_name
+    type: text-input
+    required: true
+    label:
+      en_US: Agent Name
+      zh_Hans: Agent 名称
+    placeholder:
+      en_US: My Dify Agent
+      zh_Hans: 我的 Dify Agent
+  
+  - name: agent_description
+    type: text-input
+    required: true
+    label:
+      en_US: Agent Description
+      zh_Hans: Agent 描述
+    placeholder:
+      en_US: A Dify-powered A2A Agent
+      zh_Hans: 基于 Dify 的 A2A Agent
+  
+  - name: agent_url
+    type: text-input
+    required: true
+    label:
+      en_US: Agent Public URL
+      zh_Hans: Agent 公开访问 URL
+    placeholder:
+      en_US: https://your-domain.com/e/{endpoint_id}/
+      zh_Hans: https://your-domain.com/e/{endpoint_id}/
+    helper:
+      en_US: The public URL where this agent can be accessed. Must end with /
+      zh_Hans: 此 Agent 的公开访问地址，必须以 / 结尾
+  
+  - name: agent_version
+    type: text-input
+    required: false
+    label:
+      en_US: Agent Version
+      zh_Hans: Agent 版本
+    default: '1.0.0'
+    placeholder:
+      en_US: '1.0.0'
+      zh_Hans: '1.0.0'
+
+endpoints:
+  - endpoints/a2a_server.yaml
