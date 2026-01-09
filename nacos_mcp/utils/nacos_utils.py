@@ -2,8 +2,8 @@ import logging
 from typing import Any
 
 from dify_plugin.config.logger_format import plugin_logger_handler
-from maintainer.ai.model.nacos_mcp_info import McpServerDetailInfo, McpToolMeta
 from mcp import types
+from v2.nacos.ai.model.mcp.mcp import McpToolMeta, McpServerDetailInfo
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)

@@ -1,0 +1,71 @@
+identity:
+  name: "get_a2a_agent_information"
+  author: "nacos"
+  label:
+    en_US: "Get Information of All A2A Agents"
+    zh_Hans: "获取所有 A2A 智能体信息"
+description:
+  human:
+    en_US: "Get basic information of all pre-configured A2A agents, includes name, description and skills"
+    zh_Hans: "获取所有预配置的 A2A 智能体的基础信息，包括名称、描述和技能等"
+  llm: "IMPORTANT: Call this tool FIRST before calling any agent. Returns all available agents with their agent_name, description, and skills. Use the returned agent_name as target_agent when calling call_a2a_agent. Analyze each agent's skills to decide which one best matches the user's task."
+parameters:
+  - name: discovery_type
+    type: select
+    required: true
+    label:
+      en_US: Agent Discovery Method
+      zh_Hans: 智能体发现方式
+    human_description:
+      en_US: "Choose how to discover A2A agents: via Nacos registry or direct URL"
+      zh_Hans: "选择如何发现 A2A 智能体：通过 Nacos 注册中心或直接 URL"
+    form: form
+    options:
+      - value: "nacos"
+        label:
+          en_US: Nacos Agent Registry
+          zh_Hans: Nacos 智能体注册中心
+      - value: "url"
+        label:
+          en_US: Direct URL
+          zh_Hans: 直接 URL 访问
+  - name: available_agent_names
+    type: string
+    required: false
+    label:
+      en_US: Available Agent Names (Nacos Mode)
+      zh_Hans: 可用智能体名称列表（Nacos 模式）
+    human_description:
+      en_US: "For Nacos mode: Enter multiple agent names separated by commas. Example: translator_agent,search_agent,code_agent"
+      zh_Hans: "Nacos 模式下使用：输入多个智能体名称，用英文逗号分隔。示例：translator_agent,search_agent,code_agent"
+    placeholder:
+      en_US: "agent1,agent2,agent3"
+      zh_Hans: "agent1,agent2,agent3"
+    form: form
+  - name: available_agent_urls
+    type: string
+    required: false
+    label:
+      en_US: Available Agent URLs (URL Mode)
+      zh_Hans: 可用智能体 URL 映射（URL 模式）
+    human_description:
+      en_US: "For URL mode: Enter a JSON object mapping agent names to their URLs. Example: {\"translator_agent\":\"http://host1:port/.well-known/agent.json\",\"search_agent\":\"http://host2:port/.well-known/agent.json\"}"
+      zh_Hans: "URL 模式下使用：输入 JSON 格式的智能体名称与 URL 映射。示例：{\"translator_agent\":\"http://host1:port/.well-known/agent.json\",\"search_agent\":\"http://host2:port/.well-known/agent.json\"}"
+    placeholder:
+      en_US: "{\"agent1\":\"http://url1\",\"agent2\":\"http://url2\"}"
+      zh_Hans: "{\"agent1\":\"http://url1\",\"agent2\":\"http://url2\"}"
+    form: form
+  - name: namespace_id
+    type: string
+    required: false
+    label:
+      en_US: Nacos Namespace ID
+      zh_Hans: Nacos 命名空间 ID
+    human_description:
+      en_US: "Nacos namespace ID for agent discovery. Required when using Nacos mode. Default: public"
+      zh_Hans: "Nacos 命名空间 ID，用于智能体发现。使用 Nacos 模式时需填写。默认值：public"
+    form: form
+    default: public
+extra:
+  python:
+    source: tools/get_a2a_agent_information.py

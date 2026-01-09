@@ -3,41 +3,31 @@ from typing import Any
 
 from dify_plugin import ToolProvider
 from dify_plugin.errors.tool import ToolProviderCredentialValidationError
-
-
-import logging
-from dify_plugin.config.logger_format import plugin_logger_handler
 from maintainer.ai.nacos_ai_maintainer_service import NacosAIMaintainerService
 from v2.nacos import ClientConfigBuilder
 
-# 使用自定义处理器设置日志
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-logger.addHandler(plugin_logger_handler)
 
-
-class NacosMcpProvider(ToolProvider):
+class A2aDiscoveryProvider(ToolProvider):
+    
     def _validate_credentials(self, credentials: dict[str, Any]) -> None:
 
         async def validate_credentials() -> None:
             try:
                 nacos_addr = credentials.get("nacos_addr")
-                if not nacos_addr:
-                    raise ToolProviderCredentialValidationError(
-                        "nacos_addr is required")
                 nacos_username = credentials.get("nacos_username")
                 nacos_password = credentials.get("nacos_password")
                 nacos_access_key = credentials.get("nacos_accessKey")
                 nacos_secret_key = credentials.get("nacos_secretKey")
 
-                ai_client_config = ClientConfigBuilder().server_address(
-                        nacos_addr).username(
-                        nacos_username).password(
-                        nacos_password).access_key(
-                        nacos_access_key).secret_key(
-                        nacos_secret_key).build()
-                mcp_service = await NacosAIMaintainerService.create_mcp_service(ai_client_config)
-                await mcp_service.list_mcp_servers("public","",1,10)
+                if nacos_addr:
+                    ai_client_config =ClientConfigBuilder().server_address(
+                            nacos_addr).username(
+                            nacos_username).password(
+                            nacos_password).access_key(
+                            nacos_access_key).secret_key(
+                            nacos_secret_key).build()
+                    nacos_ai_service = await NacosAIMaintainerService.create_ai_service(ai_client_config)
+                    await nacos_ai_service.list_agent_cards_by_name(namespace_id="public", agent_name=None, page_no=1, page_size=10)
             except Exception as e:
                 raise ToolProviderCredentialValidationError(str(e))
 
@@ -50,6 +40,6 @@ class NacosMcpProvider(ToolProvider):
         try:
             loop.run_until_complete(validate_credentials())
         except Exception as e:
-            logger.error(f"Error calling tool: {e}")
-            raise
+            raise ToolProviderCredentialValidationError(str(e))
+
 

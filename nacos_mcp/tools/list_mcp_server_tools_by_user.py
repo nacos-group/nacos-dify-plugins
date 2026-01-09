@@ -2,19 +2,16 @@ import asyncio
 import random
 from collections.abc import Generator
 from typing import Any
-from warnings import catch_warnings
 
 from dify_plugin import Tool
 from dify_plugin.entities.tool import ToolInvokeMessage
-from maintainer.ai.nacos_mcp_service import NacosAIMaintainerService
-from maintainer.common.ai_maintainer_client_config_builder import \
-    AIMaintainerClientConfigBuilder
-
 import logging
 from dify_plugin.config.logger_format import plugin_logger_handler
+from maintainer.ai.nacos_ai_maintainer_service import NacosAIMaintainerService
 from mcp import ClientSession
 from mcp.client.sse import sse_client
 from mcp.client.streamable_http import streamablehttp_client
+from v2.nacos import ClientConfigBuilder
 
 from utils.nacos_utils import update_tools_according_to_nacos
 
@@ -42,17 +39,17 @@ class ListTools(Tool):
                     return _tools
 
         async def list_mcp_servers_tools():
-            nacos_addr = self.runtime.credentials["nacos_addr"]
-            username = self.runtime.credentials["nacos_username"]
-            password = self.runtime.credentials["nacos_password"]
-            access_key = self.runtime.credentials["nacos_accessKey"]
-            secret_key = self.runtime.credentials["nacos_secretKey"]
-            namespace_id = tool_parameters["namespace_id"]
+            nacos_addr = self.runtime.credentials.get("nacos_addr")
+            username = self.runtime.credentials.get("nacos_username")
+            password = self.runtime.credentials.get("nacos_password")
+            access_key = self.runtime.credentials.get("nacos_accessKey")
+            secret_key = self.runtime.credentials.get("nacos_secretKey")
+            namespace_id = tool_parameters.get("namespace_id")
             if namespace_id is None or len(namespace_id) == 0:
                 namespace_id = "public"
-            mcp_server_names = tool_parameters["mcp_server_name"]
+            mcp_server_names = tool_parameters.get("mcp_server_names")
 
-            ai_client_config = AIMaintainerClientConfigBuilder().server_address(
+            ai_client_config = ClientConfigBuilder().server_address(
                     nacos_addr).username(
                     username).password(
                     password).access_key(
