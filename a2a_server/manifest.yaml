@@ -4,16 +4,12 @@ author: nacos
 name: a2a_server
 label:
   en_US: a2a_server
-  ja_JP: a2a_server
   zh_Hans: a2a_server
-  pt_BR: a2a_server
 description:
-  en_US: Expose Dify apps as A2A agents for external discovery and invocation.
-  ja_JP: Expose Dify apps as A2A agents for external discovery and invocation.
-  zh_Hans: Expose Dify apps as A2A agents for external discovery and invocation.
-  pt_BR: Expose Dify apps as A2A agents for external discovery and invocation.
-icon: icon.svg
-icon_dark: icon-dark.svg
+  en_US: Expose Dify apps as A2A protocol agents, enabling agent discovery, invocation, and optional registration to Nacos Agent Registry.
+  zh_Hans: 将 Dify 应用暴露为 A2A 协议智能体，支持智能体发现、调用，并可选注册到 Nacos 智能体注册中心。
+icon: icon.png
+icon_dark: icon-dark.png
 resource:
   memory: 268435456
   permission:

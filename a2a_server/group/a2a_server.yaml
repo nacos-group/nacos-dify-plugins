@@ -37,11 +37,8 @@ settings:
       en_US: Agent Public URL
       zh_Hans: Agent 公开访问 URL
     placeholder:
-      en_US: https://your-domain.com/e/{endpoint_id}/
-      zh_Hans: https://your-domain.com/e/{endpoint_id}/
-    helper:
-      en_US: The public URL where this agent can be accessed. Must end with /
-      zh_Hans: 此 Agent 的公开访问地址，必须以 / 结尾
+      en_US: https://your-domain.com/e/{endpoint_id}/a2a
+      zh_Hans: https://your-domain.com/e/{endpoint_id}/a2a
   
   - name: agent_version
     type: text-input
@@ -54,5 +51,77 @@ settings:
       en_US: '1.0.0'
       zh_Hans: '1.0.0'
 
+  # === Nacos 注册中心配置（可选） ===
+  - name: enable_nacos_registry
+    type: boolean
+    required: true
+    default: true
+    label:
+      en_US: Enable Nacos Registry
+      zh_Hans: 启用 Nacos 注册
+
+  - name: nacos_addr
+    type: text-input
+    required: false
+    default: ""
+    label:
+      en_US: Nacos Agent Registry Address
+      zh_Hans: Nacos 智能体注册中心地址
+    placeholder:
+      en_US: "Required when enabling Nacos registry, e.g., 127.0.0.1:8848"
+      zh_Hans: "启用 Nacos 注册时必填，如：127.0.0.1:8848"
+
+  - name: nacos_namespace_id
+    type: text-input
+    required: false
+    default: "public"
+    label:
+      en_US: Nacos Namespace ID
+      zh_Hans: Nacos 命名空间 ID
+    placeholder:
+      en_US: "Default: public. Change if using custom namespace"
+      zh_Hans: "默认：public。使用自定义命名空间时修改"
+
+  - name: nacos_username
+    type: text-input
+    required: false
+    label:
+      en_US: Nacos Username
+      zh_Hans: Nacos 用户名
+    placeholder:
+      en_US: "Required only when Nacos auth is enabled"
+      zh_Hans: "仅当 Nacos 开启认证时填写"
+
+  - name: nacos_password
+    type: secret-input
+    required: false
+    label:
+      en_US: Nacos Password
+      zh_Hans: Nacos 密码
+    placeholder:
+      en_US: "Required only when Nacos auth is enabled"
+      zh_Hans: "仅当 Nacos 开启认证时填写"
+
+  - name: nacos_accessKey
+    type: text-input
+    required: false
+    label:
+      en_US: Aliyun AccessKey
+      zh_Hans: 阿里云 AccessKey
+    placeholder:
+      en_US: "Required only when using Aliyun MSE Nacos"
+      zh_Hans: "仅使用阿里云 MSE Nacos 时填写"
+
+  - name: nacos_secretKey
+    type: secret-input
+    required: false
+    label:
+      en_US: Aliyun SecretKey
+      zh_Hans: 阿里云 SecretKey
+    placeholder:
+      en_US: "Required only when using Aliyun MSE Nacos"
+      zh_Hans: "仅使用阿里云 MSE Nacos 时填写"
+
 endpoints:
   - endpoints/a2a_server.yaml
+  - endpoints/agent_card.yaml

@@ -1,5 +1,5 @@
-path: "/a2a"
-method: "POST"
+path: "/a2a/.well-known/agent.json"
+method: "GET"
 extra:
   python:
     source: "endpoints/a2a_server.py"
