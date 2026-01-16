@@ -1,7 +1,7 @@
 # A2A Server Plugin
 
 **Author:** nacos  
-**Version:** 0.0.1  
+**Version:** 0.0.2  
 **Type:** extension  
 **Repository:** [https://github.com/nacos-group/nacos-dify-plugins](https://github.com/nacos-group/nacos-dify-plugins)
 
