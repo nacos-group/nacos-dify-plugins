@@ -1,7 +1,7 @@
 # A2A Server 插件
 
 **作者:** nacos  
-**版本:** 0.0.1  
+**版本:** 0.0.2  
 **类型:** extension  
 **仓库:** [https://github.com/nacos-group/nacos-dify-plugins](https://github.com/nacos-group/nacos-dify-plugins)
 
