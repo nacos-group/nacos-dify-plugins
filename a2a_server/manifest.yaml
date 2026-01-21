@@ -1,10 +1,10 @@
-version: 0.0.1
+version: 0.0.2
 type: plugin
 author: nacos
 name: a2a_server
 label:
-  en_US: a2a_server
-  zh_Hans: a2a_server
+  en_US: A2A Server
+  zh_Hans: A2A Server
 description:
   en_US: Expose Dify apps as A2A protocol agents, enabling agent discovery, invocation, and optional registration to Nacos Agent Registry.
   zh_Hans: 将 Dify 应用暴露为 A2A 协议智能体，支持智能体发现、调用，并可选注册到 Nacos 智能体注册中心。
@@ -24,7 +24,7 @@ plugins:
   endpoints:
     - group/a2a_server.yaml
 meta:
-  version: 0.0.1
+  version: 0.0.2
   arch:
     - amd64
     - arm64
