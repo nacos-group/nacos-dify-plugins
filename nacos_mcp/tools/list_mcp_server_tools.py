@@ -57,7 +57,7 @@ class ListTools(Tool):
                     password).access_key(
                     access_key).secret_key(
                     secret_key).build()
-            mcp_service = await NacosAIMaintainerService.create_mcp_service(
+            mcp_service = await NacosAIMaintainerService.create_ai_service(
                     ai_client_config)
 
             server_names_list = mcp_server_names.split(";")
