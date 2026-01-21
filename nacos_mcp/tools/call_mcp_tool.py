@@ -61,7 +61,7 @@ class CallTool(Tool):
 					password).access_key(
 					access_key).secret_key(
 					secret_key).build()
-			mcp_service = await NacosAIMaintainerService.create_mcp_service(
+			mcp_service = await NacosAIMaintainerService.create_ai_service(
 					ai_client_config)
 
 			name_and_version = mcp_server_name.split("::")

@@ -37,7 +37,7 @@ class ListServers(Tool):
                     password).access_key(
                     access_key).secret_key(
                     secret_key).build()
-            mcp_service = await NacosAIMaintainerService.create_mcp_service(
+            mcp_service = await NacosAIMaintainerService.create_ai_service(
                     ai_client_config)
 
             total_count, page_num, page_available,mcp_servers = await mcp_service.list_mcp_servers(namespace_id,"",page_no,page_size)
