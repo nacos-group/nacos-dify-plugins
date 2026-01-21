@@ -36,7 +36,7 @@ class NacosMcpProvider(ToolProvider):
                         nacos_password).access_key(
                         nacos_access_key).secret_key(
                         nacos_secret_key).build()
-                mcp_service = await NacosAIMaintainerService.create_mcp_service(ai_client_config)
+                mcp_service = await NacosAIMaintainerService.create_ai_service(ai_client_config)
                 await mcp_service.list_mcp_servers("public","",1,10)
             except Exception as e:
                 raise ToolProviderCredentialValidationError(str(e))
