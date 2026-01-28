@@ -29,18 +29,19 @@ class ListTools(Tool):
 
     def _invoke(self, tool_parameters: dict[str, Any]) -> Generator[ToolInvokeMessage]:
 
-        def get_clients(_protocol:str, _url:str):
-            if _protocol == "mcp-sse":
-                return sse_client(url=_url)
-            elif _protocol == "mcp-streamable":
-                return streamablehttp_client(url=_url)
-
-        async def get_tools(_protocol:str, _url:str):
-            async with get_clients(_protocol, _url) as (_read, _write, _):
-                async with ClientSession(_read, _write) as _session:
-                    await _session.initialize()
-                    _tools = await _session.list_tools()
-                    return _tools
+        async def get_tools(protocol, url):
+            if protocol == "mcp-sse":
+                async with sse_client(url) as (_read, _write):
+                    async with ClientSession(_read, _write) as _session:
+                        await _session.initialize()
+                        _tools = await _session.list_tools()
+                        return _tools
+            elif protocol == "mcp-streamable":
+                async with streamablehttp_client(url) as (_read, _write, _):
+                    async with ClientSession(_read, _write) as _session:
+                        await _session.initialize()
+                        _tools = await _session.list_tools()
+                        return _tools
 
         async def list_mcp_servers_tools():
             nacos_addr = self.runtime.credentials["nacos_addr"]
