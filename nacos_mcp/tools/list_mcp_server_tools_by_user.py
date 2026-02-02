@@ -47,7 +47,7 @@ class ListTools(Tool):
             namespace_id = tool_parameters.get("namespace_id")
             if namespace_id is None or len(namespace_id) == 0:
                 namespace_id = "public"
-            mcp_server_names = tool_parameters.get("mcp_server_names")
+            mcp_server_names = tool_parameters.get("mcp_server_name")
 
             ai_client_config = ClientConfigBuilder().server_address(
                     nacos_addr).username(
