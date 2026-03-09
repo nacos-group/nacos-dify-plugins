@@ -11,6 +11,7 @@ import asyncio
 import logging
 from collections.abc import Mapping
 
+from dify_plugin.config.logger_format import plugin_logger_handler
 from werkzeug.wrappers import Request, Response
 from dify_plugin import Endpoint
 
@@ -33,6 +34,7 @@ from .utils import (
 )
 
 logger = logging.getLogger(__name__)
+logger.addHandler(plugin_logger_handler)
 
 class A2aServerEndpoint(Endpoint):
     """

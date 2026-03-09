@@ -10,11 +10,12 @@ from typing import Optional
 from a2a.server.agent_execution import AgentExecutor, RequestContext
 from a2a.server.events import EventQueue
 from a2a.utils import new_agent_text_message
+from dify_plugin.config.logger_format import plugin_logger_handler
 
 from .conversation import ConversationManager
 
 logger = logging.getLogger(__name__)
-
+logger.addHandler(plugin_logger_handler)
 
 class DifyAppAgentExecutor(AgentExecutor):
     """
