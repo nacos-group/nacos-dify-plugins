@@ -8,8 +8,10 @@
 import logging
 from typing import Optional
 
-logger = logging.getLogger(__name__)
+from dify_plugin.config.logger_format import plugin_logger_handler
 
+logger = logging.getLogger(__name__)
+logger.addHandler(plugin_logger_handler)
 
 class ConversationManager:
     """
