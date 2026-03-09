@@ -32,7 +32,13 @@ class CallTool(Tool):
 				return streamablehttp_client(url=_url)
 
 		async def call_tools(_protocol: str, _url: str, _tool_name:str, _argument:dict):
-			async with get_clients(_protocol, _url) as (_read, _write):
+			async with get_clients(_protocol, _url) as streams:
+				# 根据返回值的长度进行解包，兼容不同版本的 mcp 库
+				if len(streams) == 2:
+					_read, _write = streams
+				else:
+					_read, _write, *rest = streams
+
 				async with ClientSession(_read, _write) as _session:
 					await _session.initialize()
 					_tools = await _session.call_tool(_tool_name, _argument)
