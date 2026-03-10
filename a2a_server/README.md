@@ -71,6 +71,53 @@ If successful, you'll receive a JSON response with your agent's metadata.
 
 For sending messages via the POST endpoint, it's recommended to use an [A2A SDK](https://a2a-protocol.org/latest/sdk/) or A2A-compatible client.
 
+### Passing Structured Inputs to Dify
+
+This plugin maps standard A2A structured context into Dify app inputs:
+
+- `params.metadata` -> Dify `inputs`
+- `message.metadata` -> Dify `inputs`
+- `message.parts[].data` -> Dify `inputs`
+- `message.parts[].text` -> Dify `query`
+
+Merge order is request metadata, then message metadata, then data parts. Later values override earlier ones.
+
+Example `message/send` request:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "1",
+  "method": "message/send",
+  "params": {
+    "metadata": {
+      "userId": "u-123"
+    },
+    "message": {
+      "role": "user",
+      "kind": "message",
+      "messageId": "msg-1",
+      "metadata": {
+        "locale": "zh-CN"
+      },
+      "parts": [
+        {
+          "kind": "text",
+          "text": "Check my wallet balance"
+        },
+        {
+          "kind": "data",
+          "data": {
+            "accountId": "30054",
+            "sid": "session-token"
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
 ## Configuration Reference
 
 | Parameter | Required | Default | Description |

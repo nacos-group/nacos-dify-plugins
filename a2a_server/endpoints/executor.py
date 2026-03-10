@@ -5,7 +5,7 @@ Dify App 执行器
 """
 
 import logging
-from typing import Optional
+from typing import Any, Optional
 
 from a2a.server.agent_execution import AgentExecutor, RequestContext
 from a2a.server.events import EventQueue
@@ -89,12 +89,58 @@ class DifyAppAgentExecutor(AgentExecutor):
         if message and message.parts:
             text_parts = []
             for part in message.parts:
-                if hasattr(part, 'text'):
-                    text_parts.append(part.text)
-                elif hasattr(part, 'root') and hasattr(part.root, 'text'):
-                    text_parts.append(part.root.text)
+                part_payload = self._unwrap_part(part)
+                if hasattr(part_payload, 'text') and part_payload.text:
+                    text_parts.append(part_payload.text)
             return '\n'.join(text_parts) if text_parts else ''
         return ''
+
+    def _unwrap_part(self, part):
+        """Unwrap A2A RootModel parts so handlers can inspect concrete payloads."""
+        return part.root if hasattr(part, 'root') else part
+
+    def _merge_input_values(
+        self,
+        current: dict[str, Any],
+        incoming: dict[str, Any] | None,
+    ) -> dict[str, Any]:
+        """Shallow-merge structured context into Dify inputs."""
+        if not incoming:
+            return current
+        for key, value in incoming.items():
+            current[key] = value
+        return current
+
+    def _extract_dify_inputs(self, context: RequestContext) -> dict[str, Any]:
+        """
+        Map standard A2A structured context into Dify inputs.
+
+        Mapping order:
+        1. Request-level params.metadata
+        2. Message-level message.metadata
+        3. Structured data from message.parts[].data
+
+        Later sources override earlier ones so explicit structured message data wins.
+        """
+        inputs: dict[str, Any] = {}
+
+        inputs = self._merge_input_values(inputs, context.metadata)
+
+        message = context.message
+        if not message:
+            return inputs
+
+        if getattr(message, 'metadata', None):
+            inputs = self._merge_input_values(inputs, message.metadata)
+
+        for part in message.parts or []:
+            part_payload = self._unwrap_part(part)
+            if getattr(part_payload, 'kind', None) != 'data':
+                continue
+            if isinstance(getattr(part_payload, 'data', None), dict):
+                inputs = self._merge_input_values(inputs, part_payload.data)
+
+        return inputs
     
     def _get_context_id(self, context: RequestContext) -> str:
         """从 A2A RequestContext 中提取 contextId"""
@@ -115,6 +161,7 @@ class DifyAppAgentExecutor(AgentExecutor):
         """
         # 1. 获取 A2A contextId
         a2a_context_id = self._get_context_id(context)
+        dify_inputs = self._extract_dify_inputs(context)
         
         # 2. 查找已有的 Dify conversation_id
         dify_conversation_id = ''
@@ -130,7 +177,7 @@ class DifyAppAgentExecutor(AgentExecutor):
             response_gen = self.session.app.chat.invoke(
                 app_id=self.app_id,
                 query=user_message,
-                inputs={},
+                inputs=dify_inputs,
                 response_mode='streaming',
                 conversation_id=dify_conversation_id or None,
             )
@@ -162,7 +209,7 @@ class DifyAppAgentExecutor(AgentExecutor):
                 # Workflow 接口（默认 blocking）
                 response = self.session.app.workflow.invoke(
                     app_id=self.app_id,
-                    inputs={'query': user_message},
+                    inputs=self._merge_input_values(dify_inputs.copy(), {'query': user_message}),
                     response_mode='blocking',
                 )
                 return self._extract_workflow_response(response)
