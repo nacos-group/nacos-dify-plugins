@@ -71,6 +71,53 @@ curl https://your-domain.com/e/{endpoint_id}/a2a/.well-known/agent.json
 
 如需通过 POST 接口发送消息，建议使用 [A2A SDK](https://a2a-protocol.org/latest/sdk/) 或 A2A 兼容的客户端。
 
+### 向 Dify 传递结构化输入
+
+这个插件会把标准 A2A 的结构化上下文映射到 Dify app 的 `inputs`：
+
+- `params.metadata` -> Dify `inputs`
+- `message.metadata` -> Dify `inputs`
+- `message.parts[].data` -> Dify `inputs`
+- `message.parts[].text` -> Dify `query`
+
+合并顺序为：请求级 metadata、消息级 metadata、`data part`。后出现的值覆盖前面的值。
+
+示例 `message/send` 请求：
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "1",
+  "method": "message/send",
+  "params": {
+    "metadata": {
+      "userId": "u-123"
+    },
+    "message": {
+      "role": "user",
+      "kind": "message",
+      "messageId": "msg-1",
+      "metadata": {
+        "locale": "zh-CN"
+      },
+      "parts": [
+        {
+          "kind": "text",
+          "text": "帮我查询钱包余额"
+        },
+        {
+          "kind": "data",
+          "data": {
+            "accountId": "30054",
+            "sid": "session-token"
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
 ## 配置参数说明
 
 | 参数 | 必填 | 默认值 | 说明 |
